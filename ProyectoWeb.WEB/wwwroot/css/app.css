@@ -101,3 +101,11 @@ a, .btn-link {
 code {
     color: #c02d76;
 }
+
+tr,td {
+    font-size:12px,
+}
+
+body{
+    background-color:red,
+}

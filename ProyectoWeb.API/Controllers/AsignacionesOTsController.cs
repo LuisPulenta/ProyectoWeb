@@ -16,15 +16,15 @@ namespace ProyectoWeb.API.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult> Get()
+        [Route("detail/{month}/{year}")]
+        public async Task<ActionResult> Get(int month, int year)
         {
 
             var asignaciones = await _context.AsignacionesOTs
                 .Where(x => x.PROYECTOMODULO == "Tasa"
-                        && x.IDREGISTRO <= 5732168
-                        && x.Fc_inicio_base!.Value.Day == 26 
-                        && x.Fc_inicio_base.Value.Month == 12 
-                        && x.Fc_inicio_base.Value.Year == 2023)
+                        && x.DECO1 == "HGU"
+                        && x.Fc_inicio_base!.Value.Month == month
+                        && x.Fc_inicio_base.Value.Year == year)
                 .OrderBy(x => x.IDREGISTRO)
                 .ToListAsync();
 
@@ -32,15 +32,15 @@ namespace ProyectoWeb.API.Controllers
             return Ok(asignaciones);
         }
 
-        [HttpGet("count")]
-        public async Task<ActionResult> GetCount()
+        [HttpGet]
+        [Route("count/{month}/{year}")]
+        public async Task<ActionResult> GetCount(int month, int year)
         {
             var cantidad = await _context.AsignacionesOTs
                 .Where(x => x.PROYECTOMODULO == "Tasa"
-                        && x.IDREGISTRO <= 5732168
-                        && x.Fc_inicio_base!.Value.Day == 26 
-                        && x.Fc_inicio_base.Value.Month == 12 
-                        && x.Fc_inicio_base.Value.Year == 2023)
+                        && x.DECO1 == "HGU"
+                        && x.Fc_inicio_base!.Value.Month == month
+                        && x.Fc_inicio_base.Value.Year == year)
                 .CountAsync();
 
             return Ok(cantidad);

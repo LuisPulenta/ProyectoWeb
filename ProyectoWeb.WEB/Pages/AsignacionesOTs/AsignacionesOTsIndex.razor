@@ -5,18 +5,11 @@
 
 <h3>Asignaciones</h3>
 
-<button type="button" class="btn btn-outline-primary" @onclick="GetData"><i class="oi oi-layers" /> Traer Datos</button>
-<button type="button" class="btn btn-outline-primary" @onclick="SaveExcel"><i class="oi oi-layers" /> Grabar a Excel</button>
-
-@if (CantAsignacionesOTs > 0)
-{
-    <p>Cantidad de Asignaciones: @CantAsignacionesOTs</p>
-}
-
-
+<div class="contenedor">
     @if (months.Count > 0)
-        {
-        <label>Mes:</label>
+    {
+        <label class="m-2">Mes: </label>
+
         <div>
             <select class="form-select" @bind="month">
                 <option value="0">-- Seleccione un Mes --</option>
@@ -26,32 +19,48 @@
                     {
                         <option value="@mes.Nromes">@mes.NombreMes</option>
                     }
-                    }
-                </select>
-            </div>
-        }
+                }
+            </select>
+        </div>
+    }
 
-        @if (years!.Count > 0)
-        {
-            <label>Año:</label>
-            <div>
-                <select class="form-select" @bind="year">
-                    <option value="0">-- Seleccione un Año --</option>
-                    @if (years is not null)
+    @if (years!.Count > 0)
+    {
+        <label class="m-2">Año: </label>
+        <div>
+            <select class="form-select" @bind="year">
+                <option value="0">-- Seleccione un Año --</option>
+                @if (years is not null)
+                {
+                    @foreach (var anio in years)
                     {
-                        @foreach (var anio in years)
-                        {
-                            <option value="@anio">@anio</option>
-                        }
+                        <option value="@anio">@anio</option>
                     }
-                </select>
-            </div>  
-        }    
+                }
+            </select>
+        </div>
+    }
 
-@if (AsignacionesOTs is null)
+    <button type="button" class="btn btn-outline-primary mx-lg-2" @onclick="GetData"><i class="oi oi-layers" /> Traer Datos</button>
+    <button type="button" class="btn btn-outline-primary mx-lg-2" @onclick="SaveExcel"><i class="oi oi-layers" /> Grabar a Excel</button>
+
+</div>
+
+@if (CantAsignacionesOTs > 0)
 {
-    <p>No hay datos todavía</p>
-    //<div class="spinner" />
+    <p>Cantidad de Asignaciones: @CantAsignacionesOTs</p>
+}
+
+
+    
+
+@if (AsignacionesOTs is null && !isLoading)
+{
+    <p class="fw-bold align-content-center mt-5 h3 text-danger">No hay datos todavía</p>
+}
+else if (isLoading)
+{
+    <div class="spinner" />
 }
 else
 {
@@ -103,12 +112,9 @@ else
 }
 
         
-
-
-
-
 @code {
 
+    private bool isLoading = false;
     private int month = new();
     private int year = new();
     private List<int>? years = new();
@@ -176,10 +182,13 @@ else
 
         try
         {
-            var responseHttp = await repository.Get<List<AsignacionesOT>>("/api/asignacionesots");
+            isLoading = true;
+            CantAsignacionesOTs = null;
+            var responseHttp = await repository.Get<List<AsignacionesOT>>($"/api/asignacionesots/detail/{month}/{year}");
             AsignacionesOTs = responseHttp.Response;
-            var responseHttp2 = await repository.Get<int>("/api/asignacionesots/count");
+            var responseHttp2 = await repository.Get<int>($"/api/asignacionesots/count/{month}/{year}");
             CantAsignacionesOTs = responseHttp2.Response;
+            isLoading = false;
         }
         catch (Exception ex)
         {

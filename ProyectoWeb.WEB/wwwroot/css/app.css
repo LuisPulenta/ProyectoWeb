@@ -102,10 +102,11 @@ code {
     color: #c02d76;
 }
 
-tr,td {
-    font-size:12px,
+.mith {
+    background-color: darkblue !important;
+    color: white !important;
 }
 
-body{
-    background-color:red,
+.mitr , .mith {
+    font-size: 9px;
 }

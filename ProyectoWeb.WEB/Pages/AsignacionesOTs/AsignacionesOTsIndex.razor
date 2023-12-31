@@ -1,68 +1,194 @@
 ﻿@page "/asignacionesOTs"
+
 @inject IRepository repository
+@inject SweetAlertService sweetAlertService
 
 <h3>Asignaciones</h3>
 
-<a class="btn btn-primary mb-3" href="#">Traer Datos</a>
-<a class="btn btn-primary mb-3" href="#">Grabar a Excel</a>
+<button type="button" class="btn btn-outline-primary" @onclick="GetData"><i class="oi oi-layers" /> Traer Datos</button>
+<button type="button" class="btn btn-outline-primary" @onclick="SaveExcel"><i class="oi oi-layers" /> Grabar a Excel</button>
 
-<p>Cantidad de Asignaciones: @CantAsignacionesOTs</p>
+@if (CantAsignacionesOTs > 0)
+{
+    <p>Cantidad de Asignaciones: @CantAsignacionesOTs</p>
+}
 
-<GenericList MyList="AsignacionesOTs">
-    <Body>
-        <table class="table table-striped">
-            <thead class="small">
-                <tr class="small">
-                    <th class="small">IDREGISTRO</th>
-                    <th class="small">RECUPIDJOBCARD</th>
-                    <th class="small">CLIENTE</th>
-                    <th class="small">NOMBRE</th>
-                    <th class="small">DECO1</th>
-                    <th class="small">ESTADO3</th>
-                    <th class="small">PasaDefinitiva</th>
-                    <th class="small">LoteNro</th>
-                    <th class="small">InformadaWS</th>
-                    <th class="small">CodigoCierre</th>
-                    <th class="small">FECHACAPTURA</th>
-                    <th class="small">HsCumplidaTime</th>
-                    <th class="small">FechaEvento1</th>
-                    <th class="small">Evento1</th>
-                </tr>
-            </thead>
-            <tbody class="small">
-                @foreach (var asignacion in AsignacionesOTs!)
+
+    @if (months.Count > 0)
+        {
+        <label>Mes:</label>
+        <div>
+            <select class="form-select" @bind="month">
+                <option value="0">-- Seleccione un Mes --</option>
+                @if (months is not null)
                 {
-                    <tr class="small">
-                        <td class="small"> @asignacion.IDREGISTRO</td>
-                        <td class="small"> @asignacion.RECUPIDJOBCARD</td>
-                        <td class="small"> @asignacion.CLIENTE</td>
-                        <td class="small"> @asignacion.NOMBRE</td>
-                        <td class="small"> @asignacion.DECO1</td>
-                        <td class="small"> @asignacion.ESTADO3</td>
-                        <td class="small"> @asignacion.PasaDefinitiva</td>
-                        <td class="small"> @asignacion.LoteNro</td>
-                        <td class="small"> @asignacion.InformadaWS</td>
-                        <td class="small"> @asignacion.CodigoCierre</td>
-                        <td class="small"> @asignacion.FECHACAPTURA</td>
-                        <td class="small"> @asignacion.HsCumplidaTime</td>
-                        <td class="small"> @asignacion.FechaEvento1</td>
-                        <td class="small"> @asignacion.Evento1</td>
+                    @foreach (var mes in months)
+                    {
+                        <option value="@mes.Nromes">@mes.NombreMes</option>
+                    }
+                    }
+                </select>
+            </div>
+        }
+
+        @if (years!.Count > 0)
+        {
+            <label>Año:</label>
+            <div>
+                <select class="form-select" @bind="year">
+                    <option value="0">-- Seleccione un Año --</option>
+                    @if (years is not null)
+                    {
+                        @foreach (var anio in years)
+                        {
+                            <option value="@anio">@anio</option>
+                        }
+                    }
+                </select>
+            </div>  
+        }    
+
+@if (AsignacionesOTs is null)
+{
+    <p>No hay datos todavía</p>
+    //<div class="spinner" />
+}
+else
+{
+    <GenericList MyList="AsignacionesOTs">
+        <Body>
+            <table class="table table-striped">
+                <thead class="mithead">
+                    <tr>
+                        <th class="mith">IDREGISTRO</th>
+                        <th class="mith">RECUPIDJOBCARD</th>
+                        <th class="mith">CLIENTE</th>
+                        <th class="mith">NOMBRE</th>
+                        <th class="mith">DECO1</th>
+                        <th class="mith">ESTADO3</th>
+                        <th class="mith">PasaDefinitiva</th>
+                        <th class="mith">LoteNro</th>
+                        <th class="mith">InformadaWS</th>
+                        <th class="mith">CodigoCierre</th>
+                        <th class="mith">FECHACAPTURA</th>
+                        <th class="mith">HsCumplidaTime</th>
+                        <th class="mith">FechaEvento1</th>
+                        <th class="mith">Evento1</th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    </Body>
-</GenericList>
+                </thead>
+                <tbody class="small">
+                    @foreach (var asignacion in AsignacionesOTs!)
+                    {
+                        <tr class="small">
+                            <td class="mitr"> @asignacion.IDREGISTRO</td>
+                            <td class="mitr"> @asignacion.RECUPIDJOBCARD</td>
+                            <td class="mitr"> @asignacion.CLIENTE</td>
+                            <td class="mitr"> @asignacion.NOMBRE</td>
+                            <td class="mitr"> @asignacion.DECO1</td>
+                            <td class="mitr"> @asignacion.ESTADO3</td>
+                            <td class="mitr"> @asignacion.PasaDefinitiva</td>
+                            <td class="mitr"> @asignacion.LoteNro</td>
+                            <td class="mitr"> @asignacion.InformadaWS</td>
+                            <td class="mitr"> @asignacion.CodigoCierre</td>
+                            <td class="mitr"> @asignacion.FECHACAPTURA</td>
+                            <td class="mitr"> @asignacion.HsCumplidaTime</td>
+                            <td class="mitr"> @asignacion.FechaEvento1</td>
+                            <td class="mitr"> @asignacion.Evento1</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </Body>
+    </GenericList>
+}
+
+        
+
+
+
 
 @code {
+
+    private int month = new();
+    private int year = new();
+    private List<int>? years = new();
+    private List<MonthModel> months = new();
+
     public List<AsignacionesOT>? AsignacionesOTs { get; set; }
     public int? CantAsignacionesOTs { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        var responseHttp = await repository.Get<List<AsignacionesOT>>("/api/asignacionesots");
-        AsignacionesOTs = responseHttp.Response;
-        var responseHttp2 = await repository.Get<int>("/api/asignacionesots/count");
-        CantAsignacionesOTs = responseHttp2.Response;
+        Load();
+    }
+
+    private void Load()
+    {
+        var actualYear = DateTime.Now.Year;
+        years!.Add(actualYear - 2);
+        years.Add(actualYear - 1);
+        years.Add(actualYear);
+
+        months.Add(new MonthModel() { Nromes = 1, NombreMes = "Enero" });
+        months.Add(new MonthModel() { Nromes = 2, NombreMes = "Febrero"});
+        months.Add(new MonthModel() { Nromes = 3, NombreMes = "Marzo" });
+        months.Add(new MonthModel() { Nromes = 4, NombreMes = "Abril" });
+        months.Add(new MonthModel() { Nromes = 5, NombreMes = "Mayo" });
+        months.Add(new MonthModel() { Nromes = 6, NombreMes = "Junio" });
+        months.Add(new MonthModel() { Nromes = 7, NombreMes = "Julio" });
+        months.Add(new MonthModel() { Nromes = 8, NombreMes = "Agosto" });
+        months.Add(new MonthModel() { Nromes = 9, NombreMes = "Setiembre" });
+        months.Add(new MonthModel() { Nromes = 10, NombreMes = "Octubre" });
+        months.Add(new MonthModel() { Nromes = 11, NombreMes = "Noviembre" });
+        months.Add(new MonthModel() { Nromes = 12, NombreMes = "Diciembre" });
+    }
+
+    private async Task GetData()
+    {
+
+        if (month==0)
+        {
+            var toast1 = sweetAlertService.Mixin(new SweetAlertOptions
+                {
+                    Toast = true,
+                    Position = SweetAlertPosition.Center,
+                    ShowConfirmButton = false,
+                    Timer = 5000
+                });
+            await toast1.FireAsync(icon: SweetAlertIcon.Error, message: "Debe seleccionar un Mes.");
+            return;
+        }
+
+        if (year == 0)
+        {
+            var toast1 = sweetAlertService.Mixin(new SweetAlertOptions
+                {
+                    Toast = true,
+                    Position = SweetAlertPosition.Center,
+                    ShowConfirmButton = false,
+                    Timer = 5000
+                });
+            await toast1.FireAsync(icon: SweetAlertIcon.Error, message: "Debe seleccionar un Año.");
+            return;
+        }
+
+
+
+        try
+        {
+            var responseHttp = await repository.Get<List<AsignacionesOT>>("/api/asignacionesots");
+            AsignacionesOTs = responseHttp.Response;
+            var responseHttp2 = await repository.Get<int>("/api/asignacionesots/count");
+            CantAsignacionesOTs = responseHttp2.Response;
+        }
+        catch (Exception ex)
+        {
+            await sweetAlertService.FireAsync("Error", ex.Message, SweetAlertIcon.Error);
+        }
+    }
+
+    private async Task SaveExcel()
+    {
+        
     }
 }

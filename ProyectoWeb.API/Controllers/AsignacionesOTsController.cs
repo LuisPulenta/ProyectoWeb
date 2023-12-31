@@ -20,7 +20,7 @@ namespace ProyectoWeb.API.Controllers
         {
 
             var asignaciones = await _context.AsignacionesOTs
-                .Where(x => x.PROYECTOMODULO == "Tasa" && x.Fc_inicio_base.Value.Month == 12 && x.Fc_inicio_base.Value.Year == 2023)
+                .Where(x => x.PROYECTOMODULO == "Tasa" && x.Fc_inicio_base!.Value.Day == 26 && x.Fc_inicio_base.Value.Month == 12 && x.Fc_inicio_base.Value.Year == 2023)
                 .OrderBy(x => x.IDREGISTRO)
                 .ToListAsync();
 
@@ -32,7 +32,7 @@ namespace ProyectoWeb.API.Controllers
         public async Task<ActionResult> GetCount()
         {
             var cantidad = await _context.AsignacionesOTs
-                .Where(x => x.PROYECTOMODULO == "Tasa" && x.Fc_inicio_base.Value.Month == 12 && x.Fc_inicio_base.Value.Year == 2023)
+                .Where(x => x.PROYECTOMODULO == "Tasa" && x.Fc_inicio_base!.Value.Day == 26 && x.Fc_inicio_base.Value.Month == 12 && x.Fc_inicio_base.Value.Year == 2023)
                 .CountAsync();
 
             return Ok(cantidad);

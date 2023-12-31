@@ -1,292 +1,68 @@
 ﻿@page "/asignacionesOTs"
-@using ProyectoWeb.Shared.Entities
-
-
 @inject IRepository repository
 
 <h3>Asignaciones</h3>
 
-@if (AsignacionesOTs is null)
-{
-    <p>Cargando...</p>
-}
-else
-{
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>IDREGISTRO</th>
-                <th>RECUPIDJOBCARD</th>
-                <th>CLIENTE</th>
-                <th>NOMBRE</th>
-                <th>DECO1</th>
-                <th>ESTADO3</th>
-                <th>PasaDefinitiva</th>
-                <th>LoteNro</th>
-                <th>InformadaWS</th>
-                <th>CodigoCierre</th>
-                <th>FECHACAPTURA</th>
-                <th>HsCumplidaTime</th>
-                <th>FechaEvento1</th>
-                <th>Evento1</th>
-                
-                @* <th>SUBAGENTEMERCADO</th>
-                
-                <th>DOMICILIO</th>
-                <th>ENTRECALLE1</th>
-                <th>ENTRECALLE2</th>
-                <th>CP</th>
-                <th>ZTECNICO</th>
-                <th>PROVINCIA</th>
-                <th>LOCALIDAD</th>
-                <th>TELEFONO</th>
-                <th>GRXX</th>
-                <th>GRYY</th>
+<a class="btn btn-primary mb-3" href="#">Traer Datos</a>
+<a class="btn btn-primary mb-3" href="#">Grabar a Excel</a>
 
-                <th>CMODEM1</th>
-                <th>FECHACARGA</th>
-                <th>ESTADO</th>
-                <th>FECHAENT</th>
-                <th>TECASIG</th>
-                <th>ZONA</th>
-                <th>IDR</th>
-                <th>MODELO</th>
-                <th>SMARTCARD</th>
-                <th>RUTA</th>
-                <th>ESTADO2</th>
-                
-                <th>TARIFA</th>
-                <th>PROYECTOMODULO</th>
-                
-                <th>ESTADOGAOS</th>
-                <th>FECHACUMPLIDA</th>
-                <th>BAJASISTEMA</th>
-                <th>IDCABECERACERTIF</th>
-                <th>SUBCON</th>
-                <th>CAUSANTEC</th>
-                
-                <th>FechaAsignada</th>
-                <th>HsCaptura</th>
-                <th>HsAsignada</th>
-                <th>HsCumplida</th>
-                <th>Observacion</th>
-                <th>LinkFoto</th>
-                <th>UserID</th>
-                
-                <th>TerminalAsigna</th>
-                <th>UrlDni</th>
-                <th>UrlFirma</th>
-                <th>UrlDni2</th>
-                <th>UrlFirma2</th>
-                <th>EsCR</th>
-                <th>Autonumerico</th>
-                <th>ReclamoTecnicoID</th>
-                <th>ClienteTipoId</th>
-                <th>Documento</th>
-                <th>Partido</th>
-                <th>EmailCliente</th>
-                <th>ObservacionCaptura</th>
-                <th>FechaInicio</th>
-                <th>FechaEnvio</th>
-                <th>MarcaModeloId</th>
-                <th>Fc_inicio_base</th>
-                <th>Fc_fin_base</th>
-                <th>Enviado</th>
-                <th>Cancelado</th>
-                <th>Recupero</th>
-                
-                <th>VisitaTecnica</th>
-                <th>Novedades</th>
-                <th>PDFGenerado</th>
-                <th>FechaCumplidaTecnico</th>
-                <th>ArchivoOutGenerado</th>
-                <th>IDSuscripcion</th>
-                <th>ItemsID</th>
-                <th>SectorOperativo</th>
-                <th>IdTipoTrabajoRel</th>
-                <th>Motivos</th>
-                <th>//ControlesEquivalencia controlesEquivalencia</th>
-                <th>FechaCita</th>
-                <th>MedioCita</th>
-                <th>NroSeriesExtras</th>
-               
-                <th>FechaEvento2</th>
-                <th>FechaEvento3</th>
-                <th>FechaEvento4</th>
-            
-                <th>Evento2</th>
-                <th>Evento3</th>
-                <th>Evento4</th>
-                <th>TelefAlternativo1</th>
-                <th>TelefAlternativo2</th>
-                <th>TelefAlternativo3</th>
-                <th>TelefAlternativo4</th>
-                <th>elegir</th>
-                <th>ModificadoAPP</th>
-                <th>Marcado</th>
-                <th>DniRecibe</th>
-                <th>NombreRecibe</th>
-                <th>NroSerieEntrega</th>
-                <th>NroSerieEntrega1</th>
-                <th>CODIGO_PEDIDO_CABECERA</th> *@
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var asignacion in AsignacionesOTs)
-            {
-                <tr>
-                    <td> @asignacion.IDREGISTRO</td>
-                    <td> @asignacion.RECUPIDJOBCARD</td>
-                    <td> @asignacion.CLIENTE</td>
-                    <td> @asignacion.NOMBRE</td>
-                    <td> @asignacion.DECO1</td>
-                    <td> @asignacion.ESTADO3</td>
-                    <td> @asignacion.PasaDefinitiva</td>
-                    <td> @asignacion.LoteNro</td>
-                    <td> @asignacion.InformadaWS</td>
-                    <td> @asignacion.CodigoCierre</td>
-                    <td> @asignacion.FECHACAPTURA</td>
-                    <td> @asignacion.HsCumplidaTime</td>
-                    <td> @asignacion.FechaEvento1</td>
-                    <td> @asignacion.Evento1</td>
+<p>Cantidad de Asignaciones: @CantAsignacionesOTs</p>
 
-
-                    
-                    
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    
-                    @* <td> @asignacion.SUBAGENTEMERCADO</td>
-
-                    <td> @asignacion.DOMICILIO</td>
-                    <td> @asignacion.ENTRECALLE1</td>
-                    <td> @asignacion.ENTRECALLE2</td>
-                    <td> @asignacion.CP</td>
-                    <td> @asignacion.ZTECNICO</td>
-                    <td> @asignacion.PROVINCIA</td>
-                    <td> @asignacion.LOCALIDAD</td>
-                    <td> @asignacion.TELEFONO</td>
-                    <td> @asignacion.GRXX</td>
-                    <td> @asignacion.GRYY</td>
-                    
-                    <td> @asignacion.CMODEM1</td>
-                    <td> @asignacion.FECHACARGA</td>
-                    <td> @asignacion.ESTADO</td>
-                    <td> @asignacion.FECHAENT</td>
-                    <td> @asignacion.TECASIG</td>
-                    <td> @asignacion.ZONA</td>
-                    <td> @asignacion.IDR</td>
-                    <td> @asignacion.MODELO</td>
-                    <td> @asignacion.SMARTCARD</td>
-                    <td> @asignacion.RUTA</td>
-                    <td> @asignacion.ESTADO2</td>
-                    
-                    <td> @asignacion.TARIFA</td>
-                    <td> @asignacion.PROYECTOMODULO</td>
-                    <td> @asignacion.FECHACAPTURA</td>
-                    <td> @asignacion.ESTADOGAOS</td>
-                    <td> @asignacion.FECHACUMPLIDA</td>
-                    <td> @asignacion.BAJASISTEMA</td>
-                    <td> @asignacion.IDCABECERACERTIF</td>
-                    <td> @asignacion.SUBCON</td>
-                    <td> @asignacion.CAUSANTEC</td>
-                    
-                    <td> @asignacion.FechaAsignada</td>
-                    <td> @asignacion.HsCaptura</td>
-                    <td> @asignacion.HsAsignada</td>
-                    <td> @asignacion.HsCumplida</td>
-                    <td> @asignacion.Observacion</td>
-                    <td> @asignacion.LinkFoto</td>
-                    <td> @asignacion.UserID</td>
-                    
-                    <td> @asignacion.TerminalAsigna</td>
-                    <td> @asignacion.UrlDni</td>
-                    <td> @asignacion.UrlFirma</td>
-                    <td> @asignacion.UrlDni2</td>
-                    <td> @asignacion.UrlFirma2</td>
-                    <td> @asignacion.EsCR</td>
-                    <td> @asignacion.Autonumerico</td>
-                    <td> @asignacion.ReclamoTecnicoID</td>
-                    <td> @asignacion.ClienteTipoId</td>
-                    <td> @asignacion.Documento</td>
-                    <td> @asignacion.Partido</td>
-                    <td> @asignacion.EmailCliente</td>
-                    <td> @asignacion.ObservacionCaptura</td>
-                    <td> @asignacion.FechaInicio</td>
-                    <td> @asignacion.FechaEnvio</td>
-                    <td> @asignacion.MarcaModeloId</td>
-                    <td> @asignacion.Fc_inicio_base</td>
-                    <td> @asignacion.Fc_fin_base</td>
-                    <td> @asignacion.Enviado</td>
-                    <td> @asignacion.Cancelado</td>
-                    <td> @asignacion.Recupero</td>
-                    
-                    <td> @asignacion.VisitaTecnica</td>
-                    <td> @asignacion.Novedades</td>
-                    <td> @asignacion.PDFGenerado</td>
-                    <td> @asignacion.FechaCumplidaTecnico</td>
-                    <td> @asignacion.ArchivoOutGenerado</td>
-                    <td> @asignacion.IDSuscripcion</td>
-                    <td> @asignacion.ItemsID</td>
-                    <td> @asignacion.SectorOperativo</td>
-                    <td> @asignacion.IdTipoTrabajoRel</td>
-                    <td> @asignacion.Motivos</td>
-                    <td> @asignacion.//ControlesEquivalencia controlesEquivalencia</td>
-                    <td> @asignacion.FechaCita</td>
-                    <td> @asignacion.MedioCita</td>
-                    <td> @asignacion.NroSeriesExtras</td>
-                    
-                    <td> @asignacion.FechaEvento2</td>
-                    <td> @asignacion.FechaEvento3</td>
-                    <td> @asignacion.FechaEvento4</td>
-                    
-                    <td> @asignacion.Evento2</td>
-                    <td> @asignacion.Evento3</td>
-                    <td> @asignacion.Evento4</td>
-                    <td> @asignacion.TelefAlternativo1</td>
-                    <td> @asignacion.TelefAlternativo2</td>
-                    <td> @asignacion.TelefAlternativo3</td>
-                    <td> @asignacion.TelefAlternativo4</td>
-                    <td> @asignacion.elegir</td>
-                    <td> @asignacion.ModificadoAPP</td>
-                    <td> @asignacion.Marcado</td>
-                    <td> @asignacion.DniRecibe</td>
-                    <td> @asignacion.NombreRecibe</td>
-                    <td> @asignacion.NroSerieEntrega</td>
-                    <td> @asignacion.NroSerieEntrega1</td>
-                    <td> @asignacion.CODIGO_PEDIDO_CABECERA</td> *@
-
+<GenericList MyList="AsignacionesOTs">
+    <Body>
+        <table class="table table-striped">
+            <thead class="small">
+                <tr class="small">
+                    <th class="small">IDREGISTRO</th>
+                    <th class="small">RECUPIDJOBCARD</th>
+                    <th class="small">CLIENTE</th>
+                    <th class="small">NOMBRE</th>
+                    <th class="small">DECO1</th>
+                    <th class="small">ESTADO3</th>
+                    <th class="small">PasaDefinitiva</th>
+                    <th class="small">LoteNro</th>
+                    <th class="small">InformadaWS</th>
+                    <th class="small">CodigoCierre</th>
+                    <th class="small">FECHACAPTURA</th>
+                    <th class="small">HsCumplidaTime</th>
+                    <th class="small">FechaEvento1</th>
+                    <th class="small">Evento1</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
+            </thead>
+            <tbody class="small">
+                @foreach (var asignacion in AsignacionesOTs!)
+                {
+                    <tr class="small">
+                        <td class="small"> @asignacion.IDREGISTRO</td>
+                        <td class="small"> @asignacion.RECUPIDJOBCARD</td>
+                        <td class="small"> @asignacion.CLIENTE</td>
+                        <td class="small"> @asignacion.NOMBRE</td>
+                        <td class="small"> @asignacion.DECO1</td>
+                        <td class="small"> @asignacion.ESTADO3</td>
+                        <td class="small"> @asignacion.PasaDefinitiva</td>
+                        <td class="small"> @asignacion.LoteNro</td>
+                        <td class="small"> @asignacion.InformadaWS</td>
+                        <td class="small"> @asignacion.CodigoCierre</td>
+                        <td class="small"> @asignacion.FECHACAPTURA</td>
+                        <td class="small"> @asignacion.HsCumplidaTime</td>
+                        <td class="small"> @asignacion.FechaEvento1</td>
+                        <td class="small"> @asignacion.Evento1</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </Body>
+</GenericList>
+
 @code {
     public List<AsignacionesOT>? AsignacionesOTs { get; set; }
+    public int? CantAsignacionesOTs { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         var responseHttp = await repository.Get<List<AsignacionesOT>>("/api/asignacionesots");
         AsignacionesOTs = responseHttp.Response;
+        var responseHttp2 = await repository.Get<int>("/api/asignacionesots/count");
+        CantAsignacionesOTs = responseHttp2.Response;
     }
 }

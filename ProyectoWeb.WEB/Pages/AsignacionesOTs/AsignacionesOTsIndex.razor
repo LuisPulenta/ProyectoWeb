@@ -8,6 +8,10 @@
 <div class="contenedor">
     @if (months.Count > 0)
     {
+
+        <label class="m-2">Contraseña: </label>
+        <input type="password" name="password" @bind="password" />
+
         <label class="m-2">Mes: </label>
 
         <div>
@@ -113,7 +117,7 @@ else
 
         
 @code {
-
+    private string password;
     private bool isLoading = false;
     private int month = new();
     private int year = new();
@@ -151,6 +155,19 @@ else
 
     private async Task GetData()
     {
+
+        if (password.ToLower() != "test")
+        {
+            var toast1 = sweetAlertService.Mixin(new SweetAlertOptions
+                {
+                    Toast = true,
+                    Position = SweetAlertPosition.Center,
+                    ShowConfirmButton = false,
+                    Timer = 5000
+                });
+            await toast1.FireAsync(icon: SweetAlertIcon.Error, message: "Contraseña INCORRECTA!!!");
+            return;
+        }
 
         if (month==0)
         {

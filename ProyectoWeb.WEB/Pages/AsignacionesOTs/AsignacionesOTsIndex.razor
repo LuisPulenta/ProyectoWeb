@@ -3,6 +3,9 @@
 @inject IRepository repository
 @inject SweetAlertService sweetAlertService
 
+@inject IJSRuntime _jsServicio
+@using ClosedXML.Excel;
+
 <h3>Asignaciones</h3>
 
 <div class="contenedor">
@@ -64,7 +67,11 @@
 }
 else if (isLoading)
 {
-    <div class="spinner" />
+    <div>
+        <div class="spinner" />
+        Espere por favor...
+    </div>
+    
 }
 else
 {
@@ -117,7 +124,7 @@ else
 
         
 @code {
-    private string password;
+    private string password = "";
     private bool isLoading = false;
     private int month = new();
     private int year = new();
@@ -215,6 +222,65 @@ else
 
     private async Task SaveExcel()
     {
-        
+
+        if (AsignacionesOTs is null || AsignacionesOTs!.Count < 1)
+        {
+            var toast1 = sweetAlertService.Mixin(new SweetAlertOptions
+                {
+                    Toast = true,
+                    Position = SweetAlertPosition.Center,
+                    ShowConfirmButton = false,
+                    Timer = 5000
+                });
+            await toast1.FireAsync(icon: SweetAlertIcon.Error, message: "No hay Registros para bajar a Excel");
+            return;
+        }
+
+
+        using (var libro = new XLWorkbook())
+        {
+            IXLWorksheet hoja = libro.Worksheets.Add("Asignaciones");
+            hoja.Cell(1, 1).Value = "IDREGISTRO";
+            hoja.Cell(1, 2).Value = "RECUPIDJOBCARD";
+            hoja.Cell(1, 3).Value = "CLIENTE";
+            hoja.Cell(1, 4).Value = "NOMBRE";
+            hoja.Cell(1, 5).Value = "DECO1";
+            hoja.Cell(1, 6).Value = "PasaDefinitiva";
+            hoja.Cell(1, 7).Value = "LoteNro";
+            hoja.Cell(1, 8).Value = "InformadaWS";
+            hoja.Cell(1, 9).Value = "CodigoCierre";
+            hoja.Cell(1, 10).Value = "FECHACAPTURA";
+            hoja.Cell(1, 11).Value = "HsCumplidaTime";
+            hoja.Cell(1, 12).Value = "FechaEvento1";
+            hoja.Cell(1, 13).Value = "Evento1";
+
+            for (int fila = 1; fila <= AsignacionesOTs!.Count; fila++)
+            {
+                hoja.Cell(fila + 1, 1).Value = AsignacionesOTs[fila - 1].IDREGISTRO;
+                hoja.Cell(fila + 1, 2).Value = AsignacionesOTs[fila - 1].RECUPIDJOBCARD;
+                hoja.Cell(fila + 1, 3).Value = AsignacionesOTs[fila - 1].CLIENTE;
+                hoja.Cell(fila + 1, 4).Value = AsignacionesOTs[fila - 1].NOMBRE;
+                hoja.Cell(fila + 1, 5).Value = AsignacionesOTs[fila - 1].DECO1;
+                hoja.Cell(fila + 1, 6).Value = AsignacionesOTs[fila - 1].PasaDefinitiva;
+                hoja.Cell(fila + 1, 7).Value = AsignacionesOTs[fila - 1].LoteNro;
+                hoja.Cell(fila + 1, 8).Value = AsignacionesOTs[fila - 1].InformadaWS;
+                hoja.Cell(fila + 1, 9).Value = AsignacionesOTs[fila - 1].CodigoCierre;
+                hoja.Cell(fila + 1, 10).Value = AsignacionesOTs[fila - 1].FECHACAPTURA;
+                hoja.Cell(fila + 1, 11).Value = AsignacionesOTs[fila - 1].HsCumplidaTime;
+                hoja.Cell(fila + 1, 12).Value = AsignacionesOTs[fila - 1].FechaEvento1;
+                hoja.Cell(fila + 1, 13).Value = AsignacionesOTs[fila - 1].Evento1;
+            }
+            using (var memoria = new MemoryStream())
+            {
+                libro.SaveAs(memoria);
+                var nombreExcel = string.Concat("Asignaciones-", month.ToString(), "-", year.ToString(), ".xlsx");
+
+                await _jsServicio.InvokeAsync<object>(
+                    "DescargarExcel",
+                    nombreExcel,
+                    Convert.ToBase64String(memoria.ToArray())
+                );
+            }
+        }
     }
 }

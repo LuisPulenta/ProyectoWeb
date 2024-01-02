@@ -9,11 +9,12 @@
 <h3>Asignaciones</h3>
 
 <div class="contenedor">
+    
     @if (months.Count > 0)
     {
 
         <label class="m-2">Contraseña: </label>
-        <input type="password" name="password" @bind="password" />
+        <input type="password" name="password" size="10" @bind="password" />
 
         <label class="m-2">Mes: </label>
 
@@ -49,31 +50,26 @@
     }
 
     <button type="button" class="btn btn-outline-primary mx-lg-2" @onclick="GetData"><i class="oi oi-layers" /> Traer Datos</button>
-    <button type="button" class="btn btn-outline-primary mx-lg-2" @onclick="SaveExcel"><i class="oi oi-layers" /> Grabar a Excel</button>
+    <button type="button" class="btn btn-outline-primary mx-lg-2" @onclick="SaveExcelAux"><i class="oi oi-layers" /> Grabar a Excel</button>
 
 </div>
-
-@if (CantAsignacionesOTs > 0)
-{
-    <p>Cantidad de Asignaciones: @CantAsignacionesOTs</p>
-}
-
-
-    
+  
+@if (isLoading)
+    {
+        <div class="spinner" />
+    }
 
 @if (AsignacionesOTs is null && !isLoading)
 {
     <p class="fw-bold align-content-center mt-5 h3 text-danger">No hay datos todavía</p>
 }
-else if (isLoading)
+
+@if (CantAsignacionesOTs > 0)
 {
-    <div>
-        <div class="spinner" />
-        Espere por favor...
-    </div>
-    
+    <p class="mt-3">Cantidad de Asignaciones: @CantAsignacionesOTs</p>
 }
-else
+
+@if (CantAsignacionesOTs > 0)
 {
     <GenericList MyList="AsignacionesOTs">
         <Body>
@@ -122,6 +118,7 @@ else
     </GenericList>
 }
 
+@* ****************************************************************************************************** *@
         
 @code {
     private string password = "";
@@ -134,11 +131,13 @@ else
     public List<AsignacionesOT>? AsignacionesOTs { get; set; }
     public int? CantAsignacionesOTs { get; set; }
 
+    // ---------------------------------------------------------------------------------
     protected override async Task OnInitializedAsync()
     {
         Load();
     }
 
+    // ---------------------------------------------------------------------------------
     private void Load()
     {
         var actualYear = DateTime.Now.Year;
@@ -160,9 +159,9 @@ else
         months.Add(new MonthModel() { Nromes = 12, NombreMes = "Diciembre" });
     }
 
+    // ---------------------------------------------------------------------------------
     private async Task GetData()
     {
-
         if (password.ToLower() != "test")
         {
             var toast1 = sweetAlertService.Mixin(new SweetAlertOptions
@@ -202,16 +201,18 @@ else
             return;
         }
 
-
-
         try
         {
             isLoading = true;
             CantAsignacionesOTs = null;
+
             var responseHttp = await repository.Get<List<AsignacionesOT>>($"/api/asignacionesots/detail/{month}/{year}");
             AsignacionesOTs = responseHttp.Response;
             var responseHttp2 = await repository.Get<int>($"/api/asignacionesots/count/{month}/{year}");
             CantAsignacionesOTs = responseHttp2.Response;
+
+            //System.Threading.Thread.Sleep(3000);
+
             isLoading = false;
         }
         catch (Exception ex)
@@ -220,23 +221,42 @@ else
         }
     }
 
+    // ---------------------------------------------------------------------------------
+    private async Task SaveExcelAux()
+    {
+        await SaveExcel();
+
+        var toast1 = sweetAlertService.Mixin(new SweetAlertOptions
+            {
+                Toast = true,
+                Position = SweetAlertPosition.Center,
+                ShowConfirmButton = false,
+                Timer = 3000
+            });
+        await toast1.FireAsync(icon: SweetAlertIcon.Info, message: "Archivo grabado con éxito!!");
+    }
+
+    // ---------------------------------------------------------------------------------
     private async Task SaveExcel()
     {
+        isLoading = true;
+        await Task.Delay(1);
+        //var responseHttp2 = await repository.Get<int>($"/api/asignacionesots/count/{month}/{year}");
 
         if (AsignacionesOTs is null || AsignacionesOTs!.Count < 1)
         {
-            var toast1 = sweetAlertService.Mixin(new SweetAlertOptions
+            var toast = sweetAlertService.Mixin(new SweetAlertOptions
                 {
                     Toast = true,
                     Position = SweetAlertPosition.Center,
                     ShowConfirmButton = false,
                     Timer = 5000
                 });
-            await toast1.FireAsync(icon: SweetAlertIcon.Error, message: "No hay Registros para bajar a Excel");
+            isLoading = false;
+            await toast.FireAsync(icon: SweetAlertIcon.Error, message: "No hay Registros para bajar a Excel");
             return;
-        }
-
-
+        }        
+               
         using (var libro = new XLWorkbook())
         {
             IXLWorksheet hoja = libro.Worksheets.Add("Asignaciones");
@@ -270,7 +290,8 @@ else
                 hoja.Cell(fila + 1, 12).Value = AsignacionesOTs[fila - 1].FechaEvento1;
                 hoja.Cell(fila + 1, 13).Value = AsignacionesOTs[fila - 1].Evento1;
             }
-            using (var memoria = new MemoryStream())
+
+            await using (var memoria = new MemoryStream())
             {
                 libro.SaveAs(memoria);
                 var nombreExcel = string.Concat("Asignaciones-", month.ToString(), "-", year.ToString(), ".xlsx");
@@ -282,5 +303,8 @@ else
                 );
             }
         }
+
+        isLoading = false;
+        await Task.Delay(1);
     }
 }

@@ -22,7 +22,8 @@ namespace ProyectoWeb.API.Controllers
 
             var asignaciones = await _context.AsignacionesOTs
                 .Where(x => x.PROYECTOMODULO == "Tasa"
-                        && x.DECO1 == "HGU"
+                        //&& x.DECO1 == "HGU"
+                        //&& x.IDREGISTRO<= 1865240
                         && x.Fc_inicio_base!.Value.Month == month
                         && x.Fc_inicio_base.Value.Year == year)
                 .OrderBy(x => x.IDREGISTRO)
@@ -38,7 +39,8 @@ namespace ProyectoWeb.API.Controllers
         {
             var cantidad = await _context.AsignacionesOTs
                 .Where(x => x.PROYECTOMODULO == "Tasa"
-                        && x.DECO1 == "HGU"
+                        //&& x.DECO1 == "HGU"
+                        //&& x.IDREGISTRO <= 1865240
                         && x.Fc_inicio_base!.Value.Month == month
                         && x.Fc_inicio_base.Value.Year == year)
                 .CountAsync();
